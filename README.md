@@ -1,25 +1,257 @@
-# Image Analysis Project
+# 🛡️ ImageLeak Detector
 
-Este proyecto permite analizar metadatos de imágenes utilizando ExifTool y Python.
+**ImageLeak Detector** es una herramienta de seguridad enfocada en la **detección de fuga de información en imágenes digitales**, mediante el análisis de metadatos (EXIF).
 
-## Estructura del Proyecto
+Permite identificar exposición de información sensible como ubicación (GPS), dispositivos, timestamps y posibles signos de manipulación antes de compartir imágenes.
 
-- `analyze.py`: Script principal para analizar imágenes y generar reportes.
-- `exiftool.py`: Módulo para manejar la interacción con ExifTool.
-- `gui.py`: Script para la interfaz gráfica de usuario utilizando `tkinter`.
-- `reports/`: Carpeta para almacenar los reportes generados en formato CSV y HTML.
-- `images/`: Carpeta que contiene las imágenes a ser analizadas.
-- `imgs_interfaz_grafica/`: Carpeta que contiene las imágenes a ser analizadas para probar la interfaz grafica 
-- `requirements.txt`: Archivo que lista las dependencias del proyecto.
-- `README.md`: Información del proyecto y cómo utilizarlo.
+---
 
-## Uso
+## 🎯 Problema que resuelve
 
-### Análisis de Imágenes
+Las imágenes contienen metadatos ocultos que pueden revelar:
 
-Ejecuta el script `analyze.py` para analizar una carpeta de imágenes y generar reportes en CSV y HTML.
+* 📍 Ubicación exacta (coordenadas GPS)
+* 🕒 Fecha y hora de captura
+* 📷 Dispositivo utilizado
+* 🛠️ Software de edición
 
-Ejecuta el script `gui.py` para seleccionar cualquier carpeta detro de tu computador que contengan imagenes y poder analizarlas.
+Esto representa un riesgo real de **fuga de información (Data Leakage)** en contextos personales, corporativos y OSINT.
+
+---
+
+## 🚀 Características actuales
+
+* 🔍 Extracción de metadatos usando ExifTool
+* 🧠 Motor de análisis basado en reglas
+* ⚠️ Detección de:
+
+  * Coordenadas GPS
+  * Software de edición
+  * Timestamps
+* ⚖️ Clasificación de riesgo:
+
+  * LOW
+  * MEDIUM
+  * HIGH
+
+---
+
+## 🧪 Ejemplo de uso
 
 ```bash
-python analyze.py
+python main.py path/to/image.jpg
+```
+
+### Salida esperada:
+
+```
+[+] Imagen: image.jpg
+[!] Riesgo: HIGH
+
+Hallazgos:
+- [CRITICAL] La imagen contiene coordenadas GPS
+- [MEDIUM] Imagen editada con Photoshop
+```
+
+---
+
+## 🏗️ Arquitectura
+
+El proyecto está diseñado con separación de responsabilidades:
+
+```
+image_analysis_project/
+│
+├── core/
+│   └── extractor.py      # Extracción de metadata (ExifTool)
+│   └── analyzer.py       # Orquestación del análisis
+│   └── rules.py          # Reglas de detección
+│   └── risk_engine.py    # Clasificación de riesgo
+│
+├── services/
+│   └── scanner.py        # (en desarrollo)
+│   └── sanitizer.py      # (en desarrollo)
+│
+├── cli/
+│   └── cli.py            # (en desarrollo)
+│
+├── venv/                 # Entorno virtual
+├── main.py               # Archivo Principal
+├── requirements.txt      # Dependencias
+└── README.md
+
+```
+
+---
+
+## ⚙️ Instalación
+
+### 1. Clonar repositorio
+
+```bash
+git clone <repo-url>
+cd image_leak_detector
+```
+
+---
+
+### 2. Crear entorno virtual
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+---
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4. Configurar ExifTool
+
+Descargar e instalar ExifTool y configurar la ruta en `.env`:
+
+```
+EXIFTOOL_PATH=C:\ExifTool\exiftool.exe
+```
+
+---
+
+## 🔧 Configuración
+
+El proyecto utiliza variables de entorno para evitar hardcoding:
+
+* `EXIFTOOL_PATH` → ruta al ejecutable de ExifTool
+
+---
+
+## 🛡️ Casos de uso
+
+* Prevención de fuga de información en imágenes
+* Auditoría de archivos multimedia
+* Análisis OSINT
+* Concienciación en seguridad digital
+
+---
+
+## 🚧 Roadmap
+
+El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, enfocadas en evolucionar desde un motor de análisis básico hacia una herramienta completa de seguridad (DLP).
+
+---
+
+### ✅ Fase 1 — Núcleo de análisis (COMPLETADO)
+
+* [x] Extracción de metadatos con ExifTool (JSON)
+* [x] Integración robusta con subprocess (manejo de errores y timeout)
+* [x] Motor de detección basado en reglas
+* [x] Reglas implementadas:
+
+  * [x] Detección de coordenadas GPS
+  * [x] Detección de software de edición
+  * [x] Detección de timestamps
+* [x] Motor de clasificación de riesgo (LOW / MEDIUM / HIGH)
+* [x] Ejecución básica desde CLI (`main.py`)
+* [x] Validación de rutas de entrada
+
+---
+
+### 🚧 Fase 2 — Usabilidad como herramienta (EN PROGRESO)
+
+* [ ] CLI profesional:
+
+  * [ ] `check` → analizar una imagen
+  * [ ] `scan` → analizar carpeta completa
+  * [ ] `sanitize` → eliminar metadata sensible
+* [ ] Módulo `scanner.py` para análisis masivo
+* [ ] Módulo `sanitizer.py` para limpieza de metadatos
+* [ ] Output estructurado en consola (formato claro y legible)
+* [ ] Manejo de errores mejorado y mensajes consistentes
+
+---
+
+### 🔧 Fase 3 — Análisis avanzado de seguridad
+
+* [ ] Detección de inconsistencias temporales:
+
+  * CreateDate vs ModifyDate
+* [ ] Fingerprinting de dispositivo (Make, Model)
+* [ ] Identificación de patrones entre imágenes
+* [ ] Generación de hashes (SHA-256) para integridad
+* [ ] Detección de metadata sospechosa o incompleta
+
+---
+
+### 📊 Fase 4 — Reportes y análisis forense
+
+* [ ] Generación de reportes:
+
+  * [ ] JSON
+  * [ ] HTML estructurado
+* [ ] Resumen de riesgos por lote de imágenes
+* [ ] Identificación de imágenes críticas
+* [ ] Exportación de hallazgos para auditoría
+
+---
+
+### 🛡️ Fase 5 — Enfoque DLP (Data Leakage Prevention)
+
+* [ ] Modo “pre-compartir”:
+
+  * Validación antes de subir imágenes
+* [ ] Sanitización automática de metadata
+* [ ] Configuración de políticas de seguridad:
+
+  * Bloquear imágenes con GPS
+* [ ] Sistema de reglas configurable
+
+---
+
+### 🔮 Fase 6 — Funcionalidades avanzadas (futuro)
+
+* [ ] Detección de esteganografía (integración con herramientas externas)
+* [ ] Visualización de coordenadas en mapa
+* [ ] Integración con pipelines (CI/CD)
+* [ ] API REST para integración con otros sistemas
+* [ ] Interfaz gráfica avanzada (opcional)
+
+---
+
+## 🎯 Objetivo final
+
+Convertir ImageLeak Detector en una herramienta de seguridad capaz de:
+
+* Detectar fugas de información en imágenes
+* Clasificar automáticamente el nivel de riesgo
+* Prevenir la exposición de datos sensibles antes de compartir archivos
+
+
+---
+
+## ⚠️ Limitaciones
+
+* No detecta aún esteganografía
+* No analiza contenido visual (solo metadata)
+* Dependencia externa de ExifTool
+
+---
+
+## 🧠 Enfoque de seguridad
+
+Esta herramienta se enfoca en:
+
+* Data Leakage Prevention (DLP)
+* Análisis forense básico
+* Seguridad de la información
+
+---
+
+
+## ⚡ Nota
+
+Este proyecto está en evolución activa hacia una herramienta completa de seguridad enfocada en análisis de imágenes.
