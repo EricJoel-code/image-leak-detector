@@ -89,8 +89,8 @@ image_analysis_project/
 ### 1. Clonar repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/image_leak_detector.git
-cd image_leak_detector
+git clone https://github.com/tu-usuario/image-leak-detector.git
+cd image-leak-detector
 ```
 
 ---
