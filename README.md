@@ -34,23 +34,41 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
   * MEDIUM
   * HIGH
 
+* 📁 Análisis individual y masivo (carpetas completas)
+* 🧼 Eliminación de metadatos (sanitización - DLP)
+
 ---
 
 ## 🧪 Ejemplo de uso
 
+### 🔍 Analizar una imagen
+
 ```bash
-python main.py path/to/image.jpg
+python main.py check path/to/image.jpg
 ```
 
-### Salida esperada:
+### 📁 Analizar una carpeta completa
+
+```bash
+python main.py scan path/to/folder
+```
+
+### 🧼 Eliminar metadatos (prevención de fuga)
+
+```bash
+python main.py sanitize path/to/image.jpg
+```
+
+### 📊 Ejemplo de salida:
 
 ```
 [+] Imagen: image.jpg
 [!] Riesgo: HIGH
 
 Hallazgos:
-- [CRITICAL] La imagen contiene coordenadas GPS
-- [MEDIUM] Imagen editada con Photoshop
+- [CRITICAL] La imagen contiene coordenadas GPS (posible fuga de ubicación) 
+- [MEDIUM] Imagen editada con Photoshop 
+- [LOW] La imagen contiene fecha de creación
 ```
 
 ---
@@ -69,11 +87,11 @@ image_analysis_project/
 │   └── risk_engine.py    # Clasificación de riesgo
 │
 ├── services/
-│   └── scanner.py        # (en desarrollo)
-│   └── sanitizer.py      # (en desarrollo)
+│   └── scanner.py        # Lógica para el escaneo de imagenes
+│   └── sanitizer.py      # Eliminar los metadatos sensibles de las imagenes
 │
 ├── cli/
-│   └── cli.py            # (en desarrollo)
+│   └── cli.py            # Punto de entrada 
 │
 ├── venv/                 # Entorno virtual
 ├── main.py               # Archivo Principal
@@ -137,6 +155,22 @@ El proyecto utiliza variables de entorno para evitar hardcoding:
 * Análisis OSINT
 * Concienciación en seguridad digital
 
+### Práctico:
+
+Antes de compartir una imagen:
+
+```bash
+python main.py check foto.jpg
+```
+
+Si el riesgo es alto:
+
+```bash
+python main.py sanitize foto.jpg
+```
+
+→ Se eliminan metadatos sensibles antes de su distribución.
+
 ---
 
 ## 🚧 Roadmap
@@ -145,7 +179,7 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 
 ---
 
-### ✅ Fase 1 — Núcleo de análisis (COMPLETADO)
+### ✅ Fase 1 — Núcleo de análisis 
 
 * [x] Extracción de metadatos con ExifTool (JSON)
 * [x] Integración robusta con subprocess (manejo de errores y timeout)
@@ -161,16 +195,16 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 
 ---
 
-### 🚧 Fase 2 — Usabilidad como herramienta (EN PROGRESO)
+### 🚧 Fase 2 — Usabilidad como herramienta 
 
-* [ ] CLI profesional:
+* [x] CLI profesional:
 
-  * [ ] `check` → analizar una imagen
-  * [ ] `scan` → analizar carpeta completa
-  * [ ] `sanitize` → eliminar metadata sensible
-* [ ] Módulo `scanner.py` para análisis masivo
-* [ ] Módulo `sanitizer.py` para limpieza de metadatos
-* [ ] Output estructurado en consola (formato claro y legible)
+  * [x] `check` → analizar una imagen
+  * [x] `scan` → analizar carpeta completa
+  * [x] `sanitize` → eliminar metadata sensible
+* [x] Módulo `scanner.py` para análisis masivo
+* [x] Módulo `sanitizer.py` para limpieza de metadatos
+* [x] Output estructurado en consola (formato claro y legible)
 * [ ] Manejo de errores mejorado y mensajes consistentes
 
 ---
