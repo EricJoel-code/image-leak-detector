@@ -9,6 +9,7 @@ from services.sanitizer import sanitizer_image
 from core.extractor import extract_metadata
 from core.analyzer import analyze_metadata
 from core.risk_engine import calculate_risk
+from .formatter import print_image_result, prin_scan_summary
 
 
 def handle_check(image_path):
@@ -29,15 +30,8 @@ def handle_check(image_path):
     findings = analyze_metadata(metadata)
     risk = calculate_risk(findings)
 
-    print(f"\n[+] Imagen: {image_path}")
-    print(f"[!] Riesgo: {risk}\n")
-
-    if findings:
-        print("Hallazgos:")
-        for f in findings:
-            print(f"- [{f['type']}] {f['message']}")
-    else:
-        print("No se detectaron riesgos")
+    # Usamos el formatter para imprimir resultados
+    print_image_result(image_path, risk, findings)
 
 
 def handle_scan(folder_path):
@@ -51,10 +45,8 @@ def handle_scan(folder_path):
 
     results = scan_folder(folder_path)
 
-    print("\n===== RESUMEN =====")
-
-    for r in results:
-        print(f"{r['file']} -> {r['risk']}")
+    # Usamos el formatter para imprimir el resumen del escaneo
+    prin_scan_summary(results)
 
 
 def handle_sanitize(image_path):

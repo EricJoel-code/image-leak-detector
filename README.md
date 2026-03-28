@@ -34,7 +34,7 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
   * MEDIUM
   * HIGH
 
-* 📁 Análisis individual y masivo (carpetas completas)
+* 📊 Resumen de análisis en escaneo masivo (conteo por nivel de riesgo)
 * 🧼 Eliminación de metadatos (sanitización - DLP)
 
 ---
@@ -61,14 +61,33 @@ python main.py sanitize path/to/image.jpg
 
 ### 📊 Ejemplo de salida:
 
+🔍 Análisis individual
 ```
-[+] Imagen: image.jpg
-[!] Riesgo: HIGH
+================================================== 
+[+] Imagen: image.jpg 
+[!] Riesgo: HIGH 
+-------------------------------------------------- 
+Hallazgos: 
+    - [CRITICAL] La imagen contiene coordenadas GPS (posible fuga de ubicación) 
+    - [MEDIUM] Imagen editada con Photoshop
+==================================================
+```
 
-Hallazgos:
-- [CRITICAL] La imagen contiene coordenadas GPS (posible fuga de ubicación) 
-- [MEDIUM] Imagen editada con Photoshop 
-- [LOW] La imagen contiene fecha de creación
+📁 Escaneo de carpeta
+```
+================================================== 
+RESUMEN DE ESCANEO 
+================================================== 
+Total de imágenes analizadas: 5 
+HIGH : 2 
+MEDIUM : 1 
+LOW : 2 
+
+Detalle: 
+    - img1.jpg -> HIGH 
+    - img2.jpg -> LOW 
+    - img3.jpg -> MEDIUM 
+==================================================
 ```
 
 ---
@@ -91,7 +110,8 @@ image_analysis_project/
 │   └── sanitizer.py      # Eliminar los metadatos sensibles de las imagenes
 │
 ├── cli/
-│   └── cli.py            # Linea de comandos 
+│   └── cli.py            # Linea de comandos
+│   └── formatter.py.py   # Fomato en consola 
 │
 ├── venv/                 # Entorno virtual
 ├── main.py               # Archivo Principal
@@ -205,7 +225,7 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 * [x] Módulo `scanner.py` para análisis masivo
 * [x] Módulo `sanitizer.py` para limpieza de metadatos
 * [x] Output estructurado en consola (formato claro y legible)
-* [ ] Manejo de errores mejorado y mensajes consistentes
+* [x] Manejo de errores mejorado y mensajes consistentes
 
 ---
 
