@@ -11,7 +11,7 @@ from core.analyzer import analyze_metadata
 from core.risk_engine import calculate_risk
 
 # Importamos formatter para imprimir resultados
-from .formatter import print_image_result, prin_scan_summary
+from .formatter import print_image_result, prin_scan_summary, print_correlations
 
 # Importamos utils para hashing
 from utils.hashing import calculate_sha256
@@ -50,10 +50,11 @@ def handle_scan(folder_path):
         print("[ERROR] La carpeta no existe")
         return
 
-    results = scan_folder(folder_path)
+    results, correlations = scan_folder(folder_path)
 
-    # Usamos el formatter para imprimir el resumen del escaneo
+    # Usamos el formatter para imprimir el resumen del escaneo y las correlaciones
     prin_scan_summary(results)
+    print_correlations(correlations)
 
 
 def handle_sanitize(image_path):

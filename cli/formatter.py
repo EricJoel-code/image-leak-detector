@@ -58,3 +58,39 @@ def prin_scan_summary(results):
         print(f" - {res['file']} -> {res['risk']}")
     
     print("=" * 50)
+    
+def print_correlations(correlations):
+    """
+    Imprime relaciones detectadas entre imágenes
+    """
+    
+    print("\n" + "=" * 50)
+    print("CORRELACIONES DETECTADAS")
+    print("=" * 50)
+
+    # 📷 Dispositivos
+    print("\n[Dispositivos]")
+    for device, files in correlations["by_device"].items():
+        if len(files) > 1:
+            print(f"\n{device}:")
+            for f in files:
+                print(f"  - {f}")
+
+    # 📍 GPS
+    print("\n[Ubicación]")
+    print(f"Con GPS: {len(correlations['by_location']['WITH_GPS'])}")
+    print(f"Sin GPS: {len(correlations['by_location']['WITHOUT_GPS'])}")
+
+    # 🔐 Duplicados
+    print("\n[Duplicados]")
+    duplicates = correlations["duplicates"]
+
+    if not duplicates:
+        print("No se detectaron duplicados")
+    else:
+        for h, files in duplicates.items():
+            print(f"\nHash: {h}")
+            for f in files:
+                print(f"  - {f}")
+
+    print("=" * 50)

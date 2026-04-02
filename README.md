@@ -35,7 +35,12 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
   * ⚠️ Detección de metadata ausente (posible sanitización)
 * 🔐 Verificación de integridad:
   
-  * Generación de hash SHA-256 por archivo
+  * Generación de hash SHA-256 por imagen
+* 🔗 Correlación de imágenes:
+
+  * 📷 Agrupación por dispositivo (misma cámara)
+  * 📍 Identificación de imágenes con/sin GPS
+  * 🔐 Detección de duplicados mediante hash
 * ⚖️ Clasificación de riesgo:
 
   * LOW
@@ -46,6 +51,7 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
 * 🖥️ Output estructurado en consola (formato claro y legible)
 * 📊 Resumen de análisis en escaneo masivo (conteo por nivel de riesgo)
 * 🧼 Eliminación de metadatos (sanitización - DLP)
+* 🔗 Visualización de correlaciones entre imágenes
 
 ---
 
@@ -76,10 +82,12 @@ python main.py sanitize path/to/image.jpg
 ================================================== 
 [+] Imagen: image.jpg 
 [!] Riesgo: HIGH 
+[#] SHA-256: a3f5c9e1b7c...
 -------------------------------------------------- 
 Hallazgos: 
     - [CRITICAL] La imagen contiene coordenadas GPS (posible fuga de ubicación) 
     - [MEDIUM] Imagen editada con Photoshop
+    - [LOW] Dispositivo detectado: Canon EOS
 ==================================================
 ```
 
@@ -88,15 +96,31 @@ Hallazgos:
 ================================================== 
 RESUMEN DE ESCANEO 
 ================================================== 
-Total de imágenes analizadas: 5 
+Total de imágenes analizadas: 6 
 HIGH : 2 
-MEDIUM : 1 
+MEDIUM : 2 
 LOW : 2 
 
-Detalle: 
-    - img1.jpg -> HIGH 
-    - img2.jpg -> LOW 
-    - img3.jpg -> MEDIUM 
+================================================== 
+CORRELACIONES DETECTADAS 
+==================================================
+
+[Dispositivos]
+
+Canon EOS: 
+  - img1.jpg 
+  - img3.jpg
+
+[Ubicación]
+
+  - Con GPS: 3 
+  - Sin GPS: 3
+
+[Duplicados]
+
+Hash: a3f5c9e1... 
+  - img2.jpg 
+  - img5.jpg
 ==================================================
 ```
 
@@ -118,6 +142,7 @@ image_analysis_project/
 ├── services/
 │   └── scanner.py        # Lógica para el escaneo de imagenes
 │   └── sanitizer.py      # Eliminar los metadatos sensibles de las imagenes
+│   └── correlator.py     # Correlación de las imágenes
 │
 ├── cli/
 │   └── cli.py            # Linea de comandos
@@ -250,7 +275,12 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 * [x] Fingerprinting de dispositivo (Make, Model)
 * [x] Generación de hashes (SHA-256) para integridad
 * [x] Detección de metadata sospechosa o incompleta
-* [ ] Identificación de patrones entre imágenes
+* [x] Correlación de imágenes:
+
+  * [x] Agrupación por dispositivo (Make, Model)
+  * [x] Identificación de imágenes con/sin GPS
+  * [x] Detección de duplicados por hash (SHA-256)
+
 
 ---
 
@@ -260,7 +290,8 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 
   * [ ] JSON
   * [ ] HTML estructurado
-* [ ] Resumen de riesgos por lote de imágenes
+* [x] Resumen de riesgos por lote de imágenes
+* [x] Generación de correlaciones para análisis forense
 * [ ] Identificación de imágenes críticas
 * [ ] Exportación de hallazgos para auditoría
 
