@@ -46,6 +46,11 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
   * LOW
   * MEDIUM
   * HIGH
+* 📊 Reportes y exportación
+
+  * Generación de reportes en formato JSON
+  * Exportación de resultados de análisis y correlación
+  * Estructura lista para integración con herramientas externas (SIEM, pipelines)
 
 * 📁 Análisis individual y masivo (carpetas completas)
 * 🖥️ Output estructurado en consola (formato claro y legible)
@@ -124,6 +129,33 @@ Hash: a3f5c9e1...
 ==================================================
 ```
 
+📁 Escaneo con exportación JSON
+```
+python main.py scan path/to/folder --json report.json
+```
+Esto generará un archivo estructurado con:
+
+  - Resultados por imagen
+  - Clasificación de riesgo
+  - Correlaciones detectadas
+  - Resumen del análisis
+
+Ejemplo de estructura:
+```
+{
+  "generated_at": "2026-04-04T23:10:00",
+  "summary": {
+  "total": 3,
+  "HIGH": 1,
+  "MEDIUM": 1,
+  "LOW": 1
+ },
+ "images": [...],
+ "correlations": {...}
+}
+```
+Este formato permite integrar la herramienta con sistemas externos de análisis o monitoreo.
+
 ---
 
 ## 🏗️ Arquitectura
@@ -143,6 +175,7 @@ image_analysis_project/
 │   └── scanner.py        # Lógica para el escaneo de imagenes
 │   └── sanitizer.py      # Eliminar los metadatos sensibles de las imagenes
 │   └── correlator.py     # Correlación de las imágenes
+│   └── exporter.py       # Exportación a JSON
 │
 ├── cli/
 │   └── cli.py            # Linea de comandos
@@ -288,7 +321,7 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 
 * [ ] Generación de reportes:
 
-  * [ ] JSON
+  * [x] JSON
   * [ ] HTML estructurado
 * [x] Resumen de riesgos por lote de imágenes
 * [x] Generación de correlaciones para análisis forense
