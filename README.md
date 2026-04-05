@@ -51,6 +51,20 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
   * Generación de reportes en formato JSON
   * Exportación de resultados de análisis y correlación
   * Estructura lista para integración con herramientas externas (SIEM, pipelines)
+* 🛡️ Data Leakage Prevention (DLP)
+
+  * Evaluación automática de riesgo antes de compartir imágenes
+  * Clasificación de acciones:
+    
+    * ✅ ALLOW → Imagen segura
+    * ⚠️ WARN → Riesgo moderado
+    * ❌ BLOCK → Riesgo alto (posible fuga de información)
+  * Identificación de razones de riesgo:
+    
+    * Exposición de ubicación (GPS)
+    * Información de dispositivo
+    * Posible edición de la imagen
+  * Recomendación de sanitización de metadatos
 
 * 📁 Análisis individual y masivo (carpetas completas)
 * 🖥️ Output estructurado en consola (formato claro y legible)
@@ -158,6 +172,28 @@ Este formato permite integrar la herramienta con sistemas externos de análisis 
 
 ---
 
+🛡️ Evaluación de seguridad (modo DLP)
+```
+python main.py check path/to/image.jpg --dlp
+```
+Este modo analiza la imagen y determina si es segura para ser compartida.
+
+🛡️ Resultado DLP
+```
+==================================================
+EVALUACIÓN DLP
+==================================================
+Acción: BLOCK
+
+Razones:
+- Contiene datos de ubicación (GPS)
+
+[!] Se recomienda eliminar metadata antes de compartir
+==================================================
+```
+
+---
+
 ## 🏗️ Arquitectura
 
 El proyecto está diseñado con separación de responsabilidades:
@@ -176,6 +212,7 @@ image_analysis_project/
 │   └── sanitizer.py      # Eliminar los metadatos sensibles de las imagenes
 │   └── correlator.py     # Correlación de las imágenes
 │   └── exporter.py       # Exportación a JSON
+│   └── dlp.py            # Evalución de riesgo de una imágen 
 │
 ├── cli/
 │   └── cli.py            # Linea de comandos
@@ -332,6 +369,8 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 
 ### 🛡️ Fase 5 — Enfoque DLP (Data Leakage Prevention)
 
+* [x] Evaluación DLP (ALLOW / WARN / BLOCK)
+* [x] Recomendación de sanitización basada en riesgo
 * [ ] Modo “pre-compartir”:
 
   * Validación antes de subir imágenes
