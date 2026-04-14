@@ -20,9 +20,9 @@ from utils.hashing import calculate_sha256
 
 
 
-def handle_check(image_path, dlp_mode=False):
+def handle_check(image_path, dlp_mode=False, auto_sanitize=False):
     """
-    Analiza una sola imagen con opción de evaluación DLP
+    Analiza una imagen con soporte DLP y auto-sanitización
     """
 
     if not os.path.exists(image_path):
@@ -47,6 +47,15 @@ def handle_check(image_path, dlp_mode=False):
     if dlp_mode:
         decision = evaluate_dlp(risk, findings)
         print_dlp_result(decision)
+        
+        # Si se recomienda auto-sanitización y el usuario lo ha solicitado, procedemos a sanitizar
+        if auto_sanitize:
+            
+            if decision["auto_sanitize_recommended"]:
+                print("\n[INFO] Ejecutando sanitización automatizada...")
+                sanitizer_image(image_path)
+            else:
+                print("\n[INFO] No se recomienda sanitización automática para esta imagen según la evaluación DLP.")
 
 
 def handle_scan(folder_path, json_output=None):
@@ -97,6 +106,7 @@ def run():
     command = sys.argv[1]
     path = sys.argv[2]
     dlp_mode = "--dlp" in sys.argv
+    auto_sanitize = "--auto-sanitize" in sys.argv
     
     # Opcional: manejo de argumento para exportar JSON
     json_output = None
@@ -110,7 +120,7 @@ def run():
             return
             
     if command == "check":
-        handle_check(path, dlp_mode)
+        handle_check(path, dlp_mode, auto_sanitize)
 
     elif command == "scan":
         handle_scan(path, json_output)

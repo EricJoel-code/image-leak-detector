@@ -65,6 +65,17 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
     * Información de dispositivo
     * Posible edición de la imagen
   * Recomendación de sanitización de metadatos
+  * 🤖 Auto-sanitización inteligente
+
+* Eliminación automática de metadatos sensibles basada en el nivel de riesgo
+* Activación mediante flag `--auto-sanitize`
+* Integración con el motor DLP:
+
+  * HIGH → sanitización automática recomendada y ejecutada
+  * MEDIUM → sanitización sugerida
+  * LOW → no requerida
+* Uso de ExifTool para limpieza segura de metadata
+
 
 * 📁 Análisis individual y masivo (carpetas completas)
 * 🖥️ Output estructurado en consola (formato claro y legible)
@@ -191,6 +202,32 @@ Razones:
 [!] Se recomienda eliminar metadata antes de compartir
 ==================================================
 ```
+
+🤖 Auto-sanitización basada en riesgo
+
+```bash id="a4r9xk"
+python main.py check path/to/image.jpg --dlp --auto-sanitize
+```
+
+Este modo evalúa el riesgo y elimina automáticamente los metadatos si es necesario.
+
+🤖 Ejecución automática de sanitización
+
+```text id="v8f0pk"
+==================================================
+EVALUACIÓN DLP
+==================================================
+Acción: BLOCK
+
+Razones:
+ - Contiene datos de ubicación (GPS)
+==================================================
+
+[INFO] Ejecutando sanitización automática...
+[OK] Metadata eliminada: image.jpg
+```
+
+
 
 ---
 
@@ -374,7 +411,7 @@ El desarrollo de **ImageLeak Detector** está organizado en fases progresivas, e
 * [ ] Modo “pre-compartir”:
 
   * Validación antes de subir imágenes
-* [ ] Sanitización automática de metadata
+* [x] Sanitización automática de metadata
 * [ ] Configuración de políticas de seguridad:
 
   * Bloquear imágenes con GPS
