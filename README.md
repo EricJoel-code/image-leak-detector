@@ -65,16 +65,16 @@ Esto representa un riesgo real de **fuga de información (Data Leakage)** en con
     * Información de dispositivo
     * Posible edición de la imagen
   * Recomendación de sanitización de metadatos
-  * 🤖 Auto-sanitización inteligente
+* 🤖 Auto-sanitización inteligente
 
-* Eliminación automática de metadatos sensibles basada en el nivel de riesgo
-* Activación mediante flag `--auto-sanitize`
-* Integración con el motor DLP:
+  * Eliminación automática de metadatos sensibles basada en el nivel de riesgo
+  * Activación mediante flag `--auto-sanitize`
+  * Integración con el motor DLP:
 
-  * HIGH → sanitización automática recomendada y ejecutada
-  * MEDIUM → sanitización sugerida
-  * LOW → no requerida
-* Uso de ExifTool para limpieza segura de metadata
+    * HIGH → sanitización automática recomendada y ejecutada
+    * MEDIUM → sanitización sugerida
+    * LOW → no requerida
+  * Uso de ExifTool para limpieza segura de metadata
 
 
 * 📁 Análisis individual y masivo (carpetas completas)
